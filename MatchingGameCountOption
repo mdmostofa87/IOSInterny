@@ -1,0 +1,43 @@
+//
+//  ViewController.swift
+//  MatchGameM
+//
+//  Created by arwa rahman on 12/10/19.
+//  Copyright © 2019 arwa rahman. All rights reserved.
+//
+
+import UIKit
+
+class ViewController: UIViewController {
+
+    @IBOutlet weak var count: UILabel!
+    var flipCount = 0
+    @IBAction func image1(_ sender: UIButton) {
+        flipCount += 1
+        count.text = "Flips:\(flipCount)"
+        flipCard2(withEmoji: "🤠", on: sender)
+
+    }
+    
+    @IBAction func image2(_ sender: UIButton) {
+        flipCount += 1
+        count.text = "Flips:\(flipCount)"
+        flipCard2(withEmoji: "🎃", on: sender)
+    }
+    func flipCard2(withEmoji emoji:String,on Button:UIButton) {
+        if Button.currentTitle == emoji{
+            Button.setTitle("", for: UIControl.State.normal)
+            Button.backgroundColor = #colorLiteral(red: 0.5568627715, green: 0.3529411852, blue: 0.9686274529, alpha: 1)
+        }
+        else{
+            Button.setTitle(emoji, for: UIControl.State.normal)
+            Button.backgroundColor = #colorLiteral(red: 0.3411764801, green: 0.6235294342, blue: 0.1686274558, alpha: 1)
+        
+        }
+    }
+}
+
+
+
+
+
