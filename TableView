@@ -1,0 +1,14 @@
+import UIKit
+
+class ViewController: UIViewController,UITableViewDataSource,UITableViewDelegate {
+    let CellNew = ["Jahid","Sagor"]
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        return CellNew.count
+    }
+    
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        let cell = tableView.dequeueReusableCell(withIdentifier: "MyCell", for: indexPath)
+        cell.textLabel?.text=CellNew[indexPath.row]
+        return cell
+        
+    }
