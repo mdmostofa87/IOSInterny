@@ -1,0 +1,51 @@
+import UIKit
+
+class ViewController: UIViewController,UITableViewDelegate,UITableViewDataSource {
+    let fruits = ["apple","orange","avocado","mango","apple","orange","avocado","mango"]
+    let vegetables = ["apple","orange","avocado","mango","apple","orange","avocado","mango"]
+    let randomimage = [#imageLiteral(resourceName: "tropical-fruits-papaya-pineapple-mango-passion-fruit-white-tropical-fruits-papaya-pineapple-mango-passion-fruit-white-118235035"),#imageLiteral(resourceName: "Unknown-2"),#imageLiteral(resourceName: "Unknown"),#imageLiteral(resourceName: "Unknown-5"),#imageLiteral(resourceName: "Unknown-3"),#imageLiteral(resourceName: "Unknown-1"),#imageLiteral(resourceName: "images"),#imageLiteral(resourceName: "Unknown-4")]
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        return (fruits.count)
+    }
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        let cell:TableViewCell = tableView.dequeueReusableCell(withIdentifier: "myCell") as!TableViewCell
+        cell.labelForOutlet.text = fruits[indexPath.row]
+        cell.label2.text = vegetables[indexPath.row]
+        cell.imag.image = randomimage[indexPath.row]
+        return cell
+    }
+
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        // Do any additional setup after loading the view.
+    }
+
+
+}
+
+
+//Table View Cell Code Below:
+
+import UIKit
+
+class TableViewCell: UITableViewCell {
+    @IBOutlet weak var labelForOutlet: UILabel!
+    
+    @IBOutlet weak var label2: UILabel!
+    @IBOutlet var imag: UIImageView!
+    
+    
+    override func awakeFromNib() {
+        super.awakeFromNib()
+        // Initialization code
+    }
+
+    override func setSelected(_ selected: Bool, animated: Bool) {
+        super.setSelected(selected, animated: animated)
+
+        // Configure the view for the selected state
+    }
+
+}
+
+
