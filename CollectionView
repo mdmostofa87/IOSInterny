@@ -1,0 +1,38 @@
+import UIKit
+
+class ViewController: UIViewController ,UICollectionViewDelegate,UICollectionViewDataSource{
+    let item = ["micky","minnie","micky&minnie","micky","micky+star","micky christmas","micky+minnie","playing micky","minnie","micky baby","micky","minnie","micky&minnie","micky","micky+star","micky christmas","micky+minnie","playing micky","minnie","micky baby"]
+    let imageForOutlet = [#imageLiteral(resourceName: "download-2"),#imageLiteral(resourceName: "images-2"),#imageLiteral(resourceName: "images"),#imageLiteral(resourceName: "download-1"),#imageLiteral(resourceName: "download-2"),#imageLiteral(resourceName: "images-1"),#imageLiteral(resourceName: "download copy"),#imageLiteral(resourceName: "images copy"),#imageLiteral(resourceName: "download-1 copy"),#imageLiteral(resourceName: "images-1 copy"),#imageLiteral(resourceName: "download-2"),#imageLiteral(resourceName: "images-2"),#imageLiteral(resourceName: "images"),#imageLiteral(resourceName: "download-1"),#imageLiteral(resourceName: "download-2"),#imageLiteral(resourceName: "images-1"),#imageLiteral(resourceName: "download copy"),#imageLiteral(resourceName: "images copy"),#imageLiteral(resourceName: "download-1 copy"),#imageLiteral(resourceName: "images-1 copy")]
+    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+        return item.count
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "myCell", for: indexPath) as!CollectionViewCell
+        cell.labelForCell.text = item[indexPath.row]
+        cell.outletImage.image = imageForOutlet[indexPath.row]
+        return cell
+    }
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        print(indexPath.item)
+    }
+    
+
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        // Do any additional setup after loading the view.
+    }
+
+
+}
+
+
+
+//CollectionViewCell Part Code:
+import UIKit
+
+class CollectionViewCell: UICollectionViewCell {
+    @IBOutlet var outletImage: UIImageView!
+    @IBOutlet weak var labelForCell: UILabel!
+    
+}
