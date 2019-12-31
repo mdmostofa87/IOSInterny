@@ -1,0 +1,234 @@
+//
+//  ViewController.swift
+//  mapKitTest
+//
+//  Created by MacBook Air on 30/12/19.
+//  Copyright © 2019 MacBook Air. All rights reserved.
+//
+
+import UIKit
+import MapKit
+import CoreLocation
+
+class ViewController: UIViewController, CLLocationManagerDelegate, MKMapViewDelegate {
+    
+    
+    var latitudeForCurrentLocation : Double = 0.0
+    var longitudeForCurrentLocation : Double = 0.0
+    var center = CLLocationCoordinate2D()
+    var locManagerForCurrentLocation = CLLocationManager()
+    var currentLocation: CLLocation!
+    
+    
+    @IBOutlet weak var mapKitViewTest: MKMapView!
+    
+    
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        
+        
+        mapKitViewTest.delegate = self
+        mapKitViewTest.mapType = MKMapType.standard
+        mapKitViewTest.isZoomEnabled = true
+        mapKitViewTest.isScrollEnabled = true
+        mapKitViewTest.showsUserLocation = true
+        
+        // Or, if needed, we can position map in the center of the view
+        mapKitViewTest.center = view.center
+        self.locManagerForCurrentLocation.delegate = self
+        locManagerForCurrentLocation.desiredAccuracy = kCLLocationAccuracyBest
+        locManagerForCurrentLocation.requestAlwaysAuthorization()
+        if CLLocationManager.locationServicesEnabled() {
+        //locationManager.startUpdatingHeading()
+        locManagerForCurrentLocation.startUpdatingLocation()
+        }
+        // Do any additional setup after loading the view.
+        getCurrentLocation()
+    }
+    
+    func getCurrentLocation()
+    {
+    if CLLocationManager.locationServicesEnabled(){
+    guard let lat = locManagerForCurrentLocation.location?.coordinate.latitude else {
+    return print("Fatal error, not getting location service")
+    }
+    let lng = locManagerForCurrentLocation.location?.coordinate.longitude
+    latitudeForCurrentLocation = lat
+    longitudeForCurrentLocation = lng!
+        
+    print("latitude for current location is : \(latitudeForCurrentLocation)" + " and longitude is :\(longitudeForCurrentLocation)")
+
+    }
+        points.append(CLLocationCoordinate2DMake(latitudeForCurrentLocation,
+        longitudeForCurrentLocation))
+
+        points.append(CLLocationCoordinate2DMake(23.5540244750357, 90.5664424959305))
+
+        let polyline = MKPolyline(coordinates: &points, count: points.count)
+
+        mapKitViewTest.addOverlay(polyline)
+    }
+    
+    
+    
+    func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
+
+    let userLocation:CLLocation = locations[0] as CLLocation
+
+    // Call stopUpdatingLocation() to stop listening for location updates,
+
+    // other wise this function will be called every time when user location changes.
+
+    //manager.stopUpdatingLocation()
+
+    let center = CLLocationCoordinate2D(latitude: userLocation.coordinate.latitude, longitude:
+    userLocation.coordinate.longitude)
+
+    let region = MKCoordinateRegion(center: center, span: MKCoordinateSpan(latitudeDelta: 0.01,
+    longitudeDelta: 0.01))
+
+    mapKitViewTest.setRegion(region, animated: true)
+        // Drop a pin at user's Current Location
+
+        let myAnnotation: MKPointAnnotation = MKPointAnnotation()
+
+        myAnnotation.coordinate = CLLocationCoordinate2DMake(userLocation.coordinate.latitude,
+        userLocation.coordinate.longitude);
+
+        reverseGEOCODE(latitude: userLocation.coordinate.latitude, longitude: userLocation.coordinate.longitude)
+
+        myAnnotation.title = "Current location"
+
+        myAnnotation.subtitle = "location subtitle"
+
+        mapKitViewTest.addAnnotation(myAnnotation)
+
+        // drop pin to another location.
+
+        let myAnnotation2: MKPointAnnotation = MKPointAnnotation()
+
+        myAnnotation2.coordinate = CLLocationCoordinate2DMake(23.5540244750357, 90.5664424959305);
+
+        reverseGEOCODE(latitude: 23.5540244750357, longitude: 90.5664424959305)
+
+        myAnnotation2.title = "location 2"
+
+        myAnnotation2.subtitle = "location 2 subtitle"
+
+        mapKitViewTest.addAnnotation(myAnnotation2)
+        
+        
+        
+    }
+    
+    
+    func locationManager(_ manager: CLLocationManager, didFailWithError error: Error)
+    {
+    print("Error \(error)")
+    }
+    
+    var points = [CLLocationCoordinate2D]()
+    
+    func mapView(_ mapView: MKMapView, rendererFor overlay: MKOverlay) ->
+    MKOverlayRenderer {
+
+    let renderer = MKPolylineRenderer(overlay: overlay)
+
+    renderer.strokeColor = UIColor.red
+
+    renderer.lineWidth = 4.0
+
+    return renderer
+
+    }
+    
+    // use reverse GEOCode to find address from coordinate
+
+    func reverseGEOCODE(latitude: CLLocationDegrees, longitude: CLLocationDegrees) {
+
+    let geoCoder = CLGeocoder()
+
+    let location = CLLocation(latitude: latitude, longitude: longitude)
+
+    geoCoder.reverseGeocodeLocation(location, completionHandler: { placemarks, error in
+
+    guard let addressDict = placemarks?[0].addressDictionary else {
+
+    return
+
+    }
+        // Print each key-value pair in a new row
+
+        addressDict.forEach { _ in //print($0)
+
+        }
+
+        // Print fully formatted address
+
+        if let formattedAddress = addressDict["FormattedAddressLines"] as? [String] {
+
+        // print("formatted address = \(formattedAddress.joined(separator: ", "))")
+
+        }
+
+        if let locationName = addressDict["Name"] as? String {
+
+        print("location name = \(locationName)")
+
+        }
+
+        if let street = addressDict["Thoroughfare"] as? String {
+
+        print("street = \(street)")
+
+        }
+        
+        // Print each key-value pair in a new row
+
+        addressDict.forEach { _ in //print($0)
+
+        }
+
+        // Print fully formatted address
+
+        if let formattedAddress = addressDict["FormattedAddressLines"] as? [String] {
+
+        // print("formatted address = \(formattedAddress.joined(separator: ", "))")
+
+        }
+
+        if let locationName = addressDict["Name"] as? String {
+
+        print("location name = \(locationName)")
+
+        }
+
+        if let street = addressDict["Thoroughfare"] as? String {
+
+        print("street = \(street)")
+
+        }
+        if let city = addressDict["City"] as? String {
+
+        print("city = \(city)")
+
+        }
+
+        if let zip = addressDict["ZIP"] as? String {
+
+        print("zip = \(zip)")
+
+        }
+
+        if let country = addressDict["Country"] as? String {
+
+        print("country = \(country)")
+
+        }
+
+        })
+
+        }
+
+
+}
