@@ -1,0 +1,39 @@
+//
+//  ViewController.swift
+//  GoogleMapApi
+//
+//  Created by MacBook Air on 31/12/19.
+//  Copyright © 2019 MacBook Air. All rights reserved.
+//
+
+import UIKit
+import GoogleMaps
+
+class ViewController: UIViewController {
+    
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        
+        // Do any additional setup after loading the view.
+        // Create a GMSCameraPosition that tells the map to display the
+        // coordinate 23.8103,90.4125at zoom level 6.
+        let camera = GMSCameraPosition.camera(withLatitude: 23.8103, longitude: 90.4125, zoom: 6.0)
+        let mapView = GMSMapView.map(withFrame: CGRect.zero, camera: camera)
+        view = mapView
+        // Create a GMSCameraPosition that tells the map to display the
+        // coordinate 23.8103.4125 at zoom level 6.
+        let marker = GMSMarker()
+        marker.position = CLLocationCoordinate2D(latitude: 90.4125, longitude: 90.4125)
+        marker.title = "Dhaka"
+        marker.snippet = "Bangladesh"
+        marker.map = mapView
+        // Do any additional setup after loading the view.
+    }
+
+
+}
+
+
+
+Google API Key:
+GMSServices.provideAPIKey("AIzaSyD7eO38BYe4t5R2Lw1yTj7fsDS6P2Y3OxQ")
