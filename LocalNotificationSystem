@@ -1,0 +1,116 @@
+//
+//  ViewController.swift
+//  NotificationSystem
+//
+//  Created by MacBook Air on 7/1/20.
+//  Copyright © 2020 MacBook Air. All rights reserved.
+//
+
+import UIKit
+import UserNotifications
+
+class ViewController: UIViewController, UNUserNotificationCenterDelegate {
+    
+    @IBAction func notification(_ sender: UIButton) {
+        UNUserNotificationCenter.current().getNotificationSettings { (notificationSettings) in
+            switch notificationSettings.authorizationStatus{
+                case .notDetermined:
+
+                    print("not allowed")
+                    self.requestForNotification()
+                    
+                case .authorized:
+
+                    self.scheduleLocalNotification()
+                    print("Allowed")
+                    
+                case .denied:
+                    print("Application Not Allowed to Display Notifications")
+                case .provisional:
+                    print("data")
+            }
+            
+        }
+        
+    }
+    
+    func requestForNotification() {
+        UNUserNotificationCenter.current().delegate = self
+        
+        let options:UNAuthorizationOptions = [.alert, .sound, .badge]
+        let center = UNUserNotificationCenter.current()
+        
+        center.requestAuthorization(options: options) { (success, error) in
+            if success {
+                print("Schedule Local Notification")
+            }
+        }
+    }
+    
+    private func scheduleLocalNotification(){
+        let notificationContent = UNMutableNotificationContent()
+
+        notificationContent.title = "Notification System"
+        notificationContent.subtitle = "Local Notifications"
+        notificationContent.body = "This is a notification system"
+
+        notificationContent.sound = UNNotificationSound.default
+        
+        let notificationTrigger = UNTimeIntervalNotificationTrigger(timeInterval: 5.0, repeats: false)
+
+        let notificationRequest = UNNotificationRequest(identifier: "local_notification", content: notificationContent, trigger: notificationTrigger)
+        
+
+        UNUserNotificationCenter.current().add(notificationRequest) { (error) in
+            if let error = error {
+                print("Unable to Add Notification Request (\(error), \(error.localizedDescription))")
+            }
+        }
+        
+    }
+    
+    func userNotificationCenter(_ center: UNUserNotificationCenter,
+                                willPresent notification: UNNotification,
+                                withCompletionHandler completionHandler: @escaping (UNNotificationPresentationOptions) -> Void) {
+
+        completionHandler([.alert, .sound])
+        print("Request for Authorization")
+    }
+    
+    func userNotificationCenter(_ center: UNUserNotificationCenter,
+                                didReceive response: UNNotificationResponse,
+                                withCompletionHandler completionHandler: @escaping () -> Void) {
+        
+
+        switch response.actionIdentifier {
+            
+        case UNNotificationDismissActionIdentifier:
+            print("Dismiss Action")
+            
+        case UNNotificationDefaultActionIdentifier:
+            print("Default")
+            
+        case "Snooze":
+            print("Snooze")
+            
+        case "Delete":
+            print("Delete")
+        default:
+            print("Unknown action")
+        }
+        completionHandler()
+    }
+    
+    override func didReceiveMemoryWarning() {
+        super.didReceiveMemoryWarning()
+    }
+    
+
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        UNUserNotificationCenter.current().delegate = self
+    }
+
+
+}
+
